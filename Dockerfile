@@ -3,4 +3,4 @@ WORKDIR /workspace/app
 COPY pom.xml .
 COPY src src
 RUN mvn install
-ENTRYPOINT ["java","-jar","*.jar"]
+ENTRYPOINT ["java","-jar","target/*.jar"]
