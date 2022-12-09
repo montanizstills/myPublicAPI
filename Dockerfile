@@ -3,5 +3,5 @@ WORKDIR /workspace/app
 COPY pom.xml .
 COPY src src
 RUN mvn install
-RUN chmod +x *.jar
-ENTRYPOINT ["java","-jar","target/*.jar"]
+RUN chmod +x ./*.jar
+ENTRYPOINT ["java","-jar","/target/*.jar"]
