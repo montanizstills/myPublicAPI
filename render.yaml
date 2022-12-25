@@ -1,0 +1,4 @@
+jobs:
+  - name: ping
+    interval: 15s # interval at which the job should run
+    command: ping -c 3 https://mypublicapi-webservice.onrender.com # command to run
