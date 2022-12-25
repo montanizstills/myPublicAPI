@@ -1,4 +1,7 @@
-jobs:
-  - name: ping
-    interval: 15s # interval at which the job should run
-    command: ping -c 3 https://mypublicapi-webservice.onrender.com # command to run
+services:
+  - type: cron
+    name: ping
+    env: docker
+#    branch: main
+    schedule: 15s # interval at which the job should run
+    dockerCommand: RUN ping -c 3 https://mypublicapi-webservice.onrender.com # command to run
