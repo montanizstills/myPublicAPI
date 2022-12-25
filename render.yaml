@@ -3,5 +3,5 @@ services:
     name: ping
     env: docker
 #    branch: main
-    schedule: 15s # interval at which the job should run
+    schedule: 0/15 * * * * * ? # interval at which the job should run
     dockerCommand: RUN ping -c 3 https://mypublicapi-webservice.onrender.com # command to run
