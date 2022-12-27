@@ -13,7 +13,7 @@ public class OpenAIEndpoints {
     private static final String ALL_FILES = "https://api.openai.com/v1/files"; // Returns a list of files that belong to the user's organization.
     private static final String DELETE_FILE = "https://api.openai.com/v1/files/{file_id}"; // Deletes a file
     private static final String RETRIEVE_FILE = "https://api.openai.com/v1/files/{file_id}"; //Returns information (metadata) about a specific file.
-    private static final String CONTENT_FILE = "https://api.openai.com/v1/files/{file_id}/content"; //Returns the contents of the file.
+    private static final String RETRIEVE_CONTENTS_FILE = "https://api.openai.com/v1/files/{file_id}/content"; //Returns the contents of the file.
     private static final String CREATE_FINE_TUNE = "https://api.openai.com/v1/fine-tunes"; // Creates a job that fine tunes a specified model from a given dataset.
     private static final String ALL_FINE_TUNES = "https://api.openai.com/v1/fine-tunes"; // Lists all organizations fine-tuning jobs.
     private static final String RETRIEVE_FINE_TUNE = "https://api.openai.com/v1/fine-tunes/{fine_tune_id}"; //Gets info about the fine tune job.
