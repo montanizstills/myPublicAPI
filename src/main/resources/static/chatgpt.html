@@ -16,12 +16,12 @@
         const textInput = document.querySelector('#text-input');
         const text = textInput.value;
         console.log(text);
-        var currentURL = window.location.href
+        let currentURL = window.location.href;
         fetch(currentURL, {
-            method: "POST",
-            body: JSON.stringify({text: text}),
-            headers: {"Content-Type": "application/json"}
-                    }
-            );
+                method: "POST",
+                body: JSON.stringify({text}),
+                headers: {"Content-Type": "application/json"}
+            }
+        );
     }
 </script>

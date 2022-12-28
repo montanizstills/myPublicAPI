@@ -1,6 +1,6 @@
 package com.github.nez.models;
 
-import com.github.nez.models.requests.CompletionRequestI;
+import com.github.nez.models.interfaces.IOpenAIRequest;
 import lombok.Data;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,29 +19,8 @@ public class OpenAIClient {
         this.API_URL = apiURL;
     }
 
-    public <RequestType extends IOpenAIRequest> RequestType makeRequest(Class<IOpenAIRequest> typeOfRequest, Map<String,String> params){
-        return null;
+    public IOpenAIRequest makeRequest(IOpenAIRequest openAIRequest, Map<String,Object> params){
+        return openAIRequest.createRequest(params);
     }
 
-    public CompletionRequestI create(Boolean echo, Boolean stream, Integer bestOf, Integer frequencyPenalty, Integer logProbs, Integer maxTokens, Integer n, Integer presencePenalty, Integer stop, Integer temperature, Integer topP, Map<String, String> logitBias, String model, String prompt, String suffix, String user, OpenAIClient openAIClient){
-        return CompletionRequestI.builder()
-                .setN(n)
-                .setOpenAIClient(openAIClient)
-                .setBestOf(bestOf)
-                .setEcho(echo)
-                .setLogitBias(logitBias)
-                .setLogProbs(logProbs)
-                .setModel(model)
-                .setFrequencyPenalty(frequencyPenalty)
-                .setMaxTokens(maxTokens)
-                .setPrompt(prompt)
-                .setStop(stop)
-                .setStream(stream)
-                .setSuffix(suffix)
-                .setTemperature(temperature)
-                .setUser(user)
-                .setTopP(topP)
-                .setPresencePenalty(presencePenalty)
-                .build();
-    }
 }

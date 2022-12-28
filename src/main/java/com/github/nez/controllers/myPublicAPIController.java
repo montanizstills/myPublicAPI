@@ -1,5 +1,8 @@
 package com.github.nez.controllers;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import com.github.nez.models.OpenAIClient;
+import com.github.nez.models.requests.CompletionRequest;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 @RestController()
 @RequestMapping(value = "/public-api-controller")
@@ -37,10 +41,9 @@ public class myPublicAPIController {
         return new ResponseEntity<>(html, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/chatgpt", params = {})
-    public void postToModel() {
-//        new OpenAIClient(System.getenv("openapi-key"),"").makeRequest(CompletionRequest.class, myEndpointParams);
-//        return new ResponseEntity<>("You have posted!",HttpStatus.OK);
-        System.out.println("You have posted!");
+    @PostMapping(path = "/chatgpt")
+    public void postToModel(@RequestBody String params) {
+//        new OpenAIClient("","").makeRequest(CompletionRequest.builder().build(), params);
+        System.out.println(params.toString());
     }
 }

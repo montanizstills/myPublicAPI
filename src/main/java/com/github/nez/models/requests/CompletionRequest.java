@@ -1,22 +1,15 @@
 package com.github.nez.models.requests;
 
+import com.github.nez.models.interfaces.IOpenAIRequest;
 import com.github.nez.models.OpenAIClient;
-import com.github.nez.models.IOpenAIRequest;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
 @Getter
 @Builder(setterPrefix = "set")
-public class CompletionRequestI implements IOpenAIRequest {
+public class CompletionRequest implements IOpenAIRequest {
 
     /**
      * @param echo             Echo back the prompt in addition to the completion
@@ -109,43 +102,28 @@ public class CompletionRequestI implements IOpenAIRequest {
 
     private final OpenAIClient openAIClient;
 
-    public String sendRequest(String prompt) {
-        // Build the request payload
-        Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("prompt", prompt);
-        requestBody.put("model", this.getModel());
-        requestBody.put("max_tokens", this.getMaxTokens());
-        requestBody.put("temperature", this.getTemperature());
-        requestBody.put("top_p", this.getTopP());
-        requestBody.put("frequency_penalty", this.getFrequencyPenalty());
-        requestBody.put("presence_penalty", this.getPresencePenalty());
-        requestBody.put("best_of", this.getBestOf());
-        requestBody.put("n", this.getN());
-        requestBody.put("echo", this.getEcho());
-        requestBody.put("log_probs", this.getLogProbs());
-        requestBody.put("stop", this.getStop());
-        requestBody.put("stream", this.getStream());
-        requestBody.put("logit_bias", this.getLogitBias());
-        requestBody.put("suffix", this.getSuffix());
-
-        // Set up the request headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        // Build the request object
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
-
-        // Send the request and get the response
-        ResponseEntity<Map> response = getOpenAIClient()
-                .getRestTemplate()
-                .postForEntity(
-                        getOpenAIClient().getAPI_URL() + "?api_key=" + getOpenAIClient().getAPI_KEY(),
-                        request,
-                        Map.class);
-
-        // Extract the generated text from the response
-        Map<String, Object> responseBody = response.getBody();
-        return (String) responseBody.get("text");
+    @Override
+    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+        return CompletionRequest.builder()
+                .setN(Integer.valueOf(String.valueOf(parameters.get("n"))))
+                .setOpenAIClient((OpenAIClient) parameters.get("openAIClient"))
+                .setBestOf(Integer.valueOf(String.valueOf(parameters.get("bestOf"))))
+                .setEcho(Boolean.valueOf(String.valueOf(parameters.get("echo"))))
+                .setLogitBias((Map<String, String>) parameters.get("logitBias"))
+                .setLogProbs(Integer.valueOf(String.valueOf(parameters.get("logProbs"))))
+                .setModel(String.valueOf(parameters.get("model")))
+                .setFrequencyPenalty(Integer.valueOf(String.valueOf(parameters.get("frequencyPenalty"))))
+                .setMaxTokens(Integer.valueOf(String.valueOf(parameters.get("maxTokens"))))
+                .setPrompt(String.valueOf(parameters.get("prompt")))
+                .setStop(Integer.valueOf(String.valueOf(parameters.get("stop"))))
+                .setStream(Boolean.valueOf(String.valueOf(parameters.get("stream"))))
+                .setSuffix(String.valueOf(parameters.get("suffix")))
+                .setTemperature(Integer.valueOf(String.valueOf(parameters.get("temperature"))))
+                .setUser(String.valueOf(parameters.get("user")))
+                .setTopP(Integer.valueOf(String.valueOf(parameters.get("topP"))))
+                .setPresencePenalty(Integer.valueOf(String.valueOf(parameters.get("presencePenalty"))))
+                .build();
     }
+
 
 }

@@ -1,6 +1,6 @@
 package com.github.nez.models;
 
-public enum Model {
+public enum OpenAIModels {
     GPT_DAVINCI_003("text-davinci-003", 4000),
     GPT_CURIE_001("text-curie-001", 2048),
     GPT_BABBAGE_001("text-babbage-001", 2048),
@@ -18,7 +18,7 @@ public enum Model {
     private String model;
     private Integer endpointTokenLimit;
 
-    Model(String model, Integer endpointTokenLimit) {
+    OpenAIModels(String model, Integer endpointTokenLimit) {
         this.model = model;
         this.endpointTokenLimit = endpointTokenLimit;
     }
