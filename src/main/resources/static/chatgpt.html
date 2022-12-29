@@ -14,39 +14,61 @@
 <div id="tunerRequestData"></div>
 
 <script>
+
+    let tunerRequestDataElement = document.getElementById("tunerRequestData")
+    function resetTunerRequestView() {
+        tunerRequestDataElement.innerHTML = '';
+        completionRequestParameters = []
+    }
+
     let completionRequestFieldEndpoint = "http://localhost:8080/public-api-controller/completion-request-fields";
-    let completionRequestParameters=[null,null];
+    let completionRequestParameters = [];
+    async function getCompletionRequestTunerFields() {
+        fetch(completionRequestFieldEndpoint, {method: "GET"})
+            .then(response => response.text()) //finish Promise<Response>
+            .then(items => {
+                items
+                    .split(',')
+                    .map(item => {
+                        // clean each element of the 'string'/array
+                        let cleanedItem = item.trim().replace(/^\[|\]$/g, '')
+                        // push the item into the global  list
+                        completionRequestParameters.push(cleanedItem)
+                    });
+            })
+            .catch(error => alert(error))
+
+    }
 
     // let http = () => fetch("",{method:"GET"})
 
     function displayOpenAIModelTuner() {
         let radios = document.getElementsByName("openaiRequestRadio")
         let selectedRadioButton;
-        let tunerRequestDataElement = document.getElementById("tunerRequestData")
+
         for (const radio of radios) {
             if (radio.checked) {
                 selectedRadioButton = radio.value
             }
         }
+
         switch (selectedRadioButton) {
             case "completionRequest":
-                fetch(completionRequestFieldEndpoint, {method: "GET"})
-                    .then(response => response.text()) //finish Promise<Response>
-                    .then(items => {
-                        items = items.split(',').map(item => item.trim().replace(/^\[|\]$/g, ''));
-                        //set value of completionRequestParameters to items;
+                // reset for each radio button interaction
+                resetTunerRequestView()
+
+                getCompletionRequestTunerFields()
+
+                console.log(completionRequestParameters)
+
+                completionRequestParameters
+                    .forEach(item => {
+                        tunerRequestDataElement.innerHTML += `<input> ${item} <br/>`
                     })
-
-                    // .then(items => {console.log(Object.values(JSON.parse(items)))})
-                    // .then(items =>{items.forEach(item => completionRequestParameters.push(item))})
-                    .catch(error => alert(error))
-
-                for (let param of completionRequestParameters) {
-                    tunerRequestDataElement.innerHTML = `<input> ${param} <br/>`
-                }
                 break;
 
             case "imageRequest":
+                tunerRequestDataElement.innerHTML=''
                 break;
         }
     }
