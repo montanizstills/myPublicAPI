@@ -6,28 +6,57 @@
     <button type=submit>Submit</button>
 
     <input type="radio" name="openaiRequestRadio" value="completionRequest"
-    onchange="displayOpenAIModelTuner()"> Completion Request
+           onchange="displayOpenAIModelTuner()"> Completion Request
 
     <input type="radio" name="openaiRequestRadio" value="imageRequest"
            onchange="displayOpenAIModelTuner()"> Image Request
-
-
 </form>
-<script>
+<div id="tunerRequestData"></div>
 
-    function displayOpenAIModelTuner(){
-       let radios = document.getElementsByName("openaiRequestRadio")
-        if (!radios.checked){
-            style.display = "hidden"
+<script>
+    let completionRequestFieldEndpoint = "http://localhost:8080/public-api-controller/completion-request-fields";
+    let completionRequestParameters=[null,null];
+
+    // let http = () => fetch("",{method:"GET"})
+
+    function displayOpenAIModelTuner() {
+        let radios = document.getElementsByName("openaiRequestRadio")
+        let selectedRadioButton;
+        let tunerRequestDataElement = document.getElementById("tunerRequestData")
+        for (const radio of radios) {
+            if (radio.checked) {
+                selectedRadioButton = radio.value
+            }
+        }
+        switch (selectedRadioButton) {
+            case "completionRequest":
+                fetch(completionRequestFieldEndpoint, {method: "GET"})
+                    .then(response => response.text()) //finish Promise<Response>
+                    .then(items => {
+                        items = items.split(',').map(item => item.trim().replace(/^\[|\]$/g, ''));
+                        //set value of completionRequestParameters to items;
+                    })
+
+                    // .then(items => {console.log(Object.values(JSON.parse(items)))})
+                    // .then(items =>{items.forEach(item => completionRequestParameters.push(item))})
+                    .catch(error => alert(error))
+
+                for (let param of completionRequestParameters) {
+                    tunerRequestDataElement.innerHTML = `<input> ${param} <br/>`
+                }
+                break;
+
+            case "imageRequest":
+                break;
         }
     }
 
 
-    function postMessage(){
+    function postMessage(text) {
         let currentURL = window.location.href;
         fetch(currentURL, {
                 method: "POST",
-                body: JSON.stringify(text={text}),
+                body: JSON.stringify(text = {text}),
                 headers: {"Content-Type": "application/json"}
             }
         );
@@ -41,5 +70,6 @@
         const textInput = document.querySelector('#text-input');
         const text = textInput.value;
         console.log(text);
+        postMessage(text);
     }
 </script>
