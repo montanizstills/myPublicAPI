@@ -65,12 +65,12 @@
                 // reset for each radio button interaction
                 resetTunerRequestView()
                 await getCompletionRequestTunerFields() //should await
-                console.log(completionRequestParameters) //TODO: Remove this line.
-                drawParameters();
+                await drawParameters();
                 break;
 
             case "imageRequest":
                 tunerRequestDataElement.innerHTML = ''
+                console.log("you've selected image!")
                 break;
         }
     }
