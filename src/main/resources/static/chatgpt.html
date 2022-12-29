@@ -1,13 +1,38 @@
 <form>
     <label for=api-key>API_KEY:</label>
     <input id=api-key>
-
     <label for=text-input>Prompt:</label>
     <textarea id=text-input></textarea>
-
     <button type=submit>Submit</button>
+
+    <input type="radio" name="openaiRequestRadio" value="completionRequest"
+    onchange="displayOpenAIModelTuner()"> Completion Request
+
+    <input type="radio" name="openaiRequestRadio" value="imageRequest"
+           onchange="displayOpenAIModelTuner()"> Image Request
+
+
 </form>
 <script>
+
+    function displayOpenAIModelTuner(){
+       let radios = document.getElementsByName("openaiRequestRadio")
+        if (!radios.checked){
+            style.display = "hidden"
+        }
+    }
+
+
+    function postMessage(){
+        let currentURL = window.location.href;
+        fetch(currentURL, {
+                method: "POST",
+                body: JSON.stringify(text={text}),
+                headers: {"Content-Type": "application/json"}
+            }
+        );
+    }
+
     const form = document.querySelector('form');
     form.addEventListener('submit', handleSubmit);
 
@@ -16,12 +41,5 @@
         const textInput = document.querySelector('#text-input');
         const text = textInput.value;
         console.log(text);
-        let currentURL = window.location.href;
-        fetch(currentURL, {
-                method: "POST",
-                body: JSON.stringify({text}),
-                headers: {"Content-Type": "application/json"}
-            }
-        );
     }
 </script>

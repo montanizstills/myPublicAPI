@@ -19,8 +19,8 @@ public class OpenAIClient {
         this.API_URL = apiURL;
     }
 
-    public IOpenAIRequest makeRequest(IOpenAIRequest openAIRequest, Map<String,Object> params){
-        return openAIRequest.createRequest(params);
+    public <RequestType extends IOpenAIRequest> RequestType makeRequest(IOpenAIRequest typeOfRequest, Map<String,String> params){
+        return null;
     }
 
 }
