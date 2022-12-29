@@ -16,14 +16,16 @@
 <script>
 
     let tunerRequestDataElement = document.getElementById("tunerRequestData")
+
     function resetTunerRequestView() {
         tunerRequestDataElement.innerHTML = '';
         completionRequestParameters = []
     }
 
-    let completionRequestFieldEndpoint = "http://localhost:8080/public-api-controller/completion-request-fields";
     let completionRequestParameters = [];
-    async function getCompletionRequestTunerFields() {
+
+    function getCompletionRequestTunerFields() {
+        let completionRequestFieldEndpoint = "http://localhost:8080/public-api-controller/completion-request-fields";
         fetch(completionRequestFieldEndpoint, {method: "GET"})
             .then(response => response.text()) //finish Promise<Response>
             .then(items => {
@@ -37,12 +39,18 @@
                     });
             })
             .catch(error => alert(error))
-
     }
 
-    // let http = () => fetch("",{method:"GET"})
+    function drawParameters() {
+        completionRequestParameters
+            .forEach(item => {
+                tunerRequestDataElement.innerHTML += `<input> ${item} <br/>`
+            })
+    }
 
-    function displayOpenAIModelTuner() {
+    // let http = async () => await fetch("",{method:"GET"})
+
+    async function displayOpenAIModelTuner() {
         let radios = document.getElementsByName("openaiRequestRadio")
         let selectedRadioButton;
 
@@ -56,19 +64,13 @@
             case "completionRequest":
                 // reset for each radio button interaction
                 resetTunerRequestView()
-
-                getCompletionRequestTunerFields()
-
-                console.log(completionRequestParameters)
-
-                completionRequestParameters
-                    .forEach(item => {
-                        tunerRequestDataElement.innerHTML += `<input> ${item} <br/>`
-                    })
+                await getCompletionRequestTunerFields() //should await
+                console.log(completionRequestParameters) //TODO: Remove this line.
+                drawParameters();
                 break;
 
             case "imageRequest":
-                tunerRequestDataElement.innerHTML=''
+                tunerRequestDataElement.innerHTML = ''
                 break;
         }
     }
