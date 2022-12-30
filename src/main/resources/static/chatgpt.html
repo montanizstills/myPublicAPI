@@ -5,28 +5,30 @@
     <textarea id=text-input></textarea>
     <button type=submit>Submit</button>
 
-    <input type="radio" name="openaiRequestRadio" value="completionRequest"
+    <input type="radio" name="openaiRequestRadio" value="CompletionRequest"
            onchange="displayOpenAIModelTuner()"> Completion Request
 
-    <input type="radio" name="openaiRequestRadio" value="imageRequest"
+    <input type="radio" name="openaiRequestRadio" value="ImageRequest"
            onchange="displayOpenAIModelTuner()"> Image Request
 </form>
 <div id="tunerRequestData"></div>
 
 <script>
-
     let tunerRequestDataElement = document.getElementById("tunerRequestData")
 
     function resetTunerRequestView() {
+        console.log("resetting tuner view...")
         tunerRequestDataElement.innerHTML = '';
-        completionRequestParameters = []
+        requestParameters = []
     }
 
-    let completionRequestParameters = [];
+    let requestParameters = [];
 
-    function getCompletionRequestTunerFields() {
-        let completionRequestFieldEndpoint = "http://localhost:8080/public-api-controller/completion-request-fields";
-        fetch(completionRequestFieldEndpoint, {method: "GET"})
+    function getRequestTunerFields(requestType) {
+        console.log("about to get request fields...")
+        // let http = async () => await fetch("",{method:"GET"}) TODO - use this method instead. This returns a Promise.
+        let requestFieldEndpoint = `http://localhost:8080/public-api-controller/request-fields/${requestType}`;
+        fetch(requestFieldEndpoint, {method: "GET"})
             .then(response => response.text()) //finish Promise<Response>
             .then(items => {
                 items
@@ -35,20 +37,20 @@
                         // clean each element of the 'string'/array
                         let cleanedItem = item.trim().replace(/^\[|\]$/g, '')
                         // push the item into the global  list
-                        completionRequestParameters.push(cleanedItem)
+                        requestParameters.push(cleanedItem)
                     });
             })
+            // .then(() => drawParameters())
             .catch(error => alert(error))
     }
 
     function drawParameters() {
-        completionRequestParameters
+        console.log("about to draw parameters...")
+        requestParameters
             .forEach(item => {
                 tunerRequestDataElement.innerHTML += `<input> ${item} <br/>`
             })
     }
-
-    // let http = async () => await fetch("",{method:"GET"})
 
     async function displayOpenAIModelTuner() {
         let radios = document.getElementsByName("openaiRequestRadio")
@@ -61,16 +63,18 @@
         }
 
         switch (selectedRadioButton) {
-            case "completionRequest":
+            case "CompletionRequest":
                 // reset for each radio button interaction
                 resetTunerRequestView()
-                await getCompletionRequestTunerFields() //should await
+                await getRequestTunerFields(selectedRadioButton) //should await
                 await drawParameters();
                 break;
 
-            case "imageRequest":
-                tunerRequestDataElement.innerHTML = ''
-                console.log("you've selected image!")
+            case "ImageRequest":
+                // reset for each radio button interaction
+                resetTunerRequestView()
+                await getRequestTunerFields(selectedRadioButton) //should await
+                await drawParameters();
                 break;
         }
     }

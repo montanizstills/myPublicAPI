@@ -1,6 +1,5 @@
 package com.github.nez.controllers;
 
-import com.github.nez.models.requests.CompletionRequest;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,10 +46,13 @@ public class myPublicAPIController {
         System.out.println(params.toString());
     }
 
-    @GetMapping(path = "completion-request-fields")
-    public ResponseEntity getCompletionRequestFields() {
+    @SneakyThrows @GetMapping(path = "request-fields/{requestType}")
+    public ResponseEntity getRequestFields(@PathVariable String requestType) {
+        // not a big fan of passing in the FQN, would much rather like to pass just {requestType}
+        String classPackageName = "com.github.nez.models.requests";
+        Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName+"."+ requestType);
         List fields = new ArrayList();
-        for (Field declaredField : CompletionRequest.class.getDeclaredFields()) {
+        for (Field declaredField : clazz.getDeclaredFields()) {
             // fancy code to remove the synthetic fields from the `field` name
             String cleanedFieldName = declaredField.getName().substring(declaredField.getName().indexOf("this$") + 1);
             fields.add(cleanedFieldName);
