@@ -1,16 +1,12 @@
 package com.github.nez.controllers;
 
+import com.github.nez.utils.Utils;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,16 +24,7 @@ public class myPublicAPIController {
     @SneakyThrows
     @GetMapping(path = "/chatgpt")
     public ResponseEntity loadPage() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL fileUrl = classLoader.getResource("static/chatgpt.html");
-        if (fileUrl == null) {
-            // Return a NOT_FOUND response if the file was not found
-            return new ResponseEntity<>("cannot find/load file!", HttpStatus.NOT_FOUND);
-        }
-        // Read the html file from the URL
-        Path filePath = Paths.get(fileUrl.toURI());
-        String html = new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
-        return new ResponseEntity<>(html, HttpStatus.OK);
+        return Utils.loadPage("static/chatgpt.html");
     }
 
     @PostMapping(path = "/chatgpt")
@@ -46,11 +33,12 @@ public class myPublicAPIController {
         System.out.println(params.toString());
     }
 
-    @SneakyThrows @GetMapping(path = "request-fields/{requestType}")
+    @SneakyThrows
+    @GetMapping(path = "request-fields/{requestType}")
     public ResponseEntity getRequestFields(@PathVariable String requestType) {
         // not a big fan of passing in the FQN, would much rather like to pass just {requestType}
         String classPackageName = "com.github.nez.models.requests";
-        Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName+"."+ requestType);
+        Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName + "." + requestType);
         List fields = new ArrayList();
         for (Field declaredField : clazz.getDeclaredFields()) {
             // fancy code to remove the synthetic fields from the `field` name

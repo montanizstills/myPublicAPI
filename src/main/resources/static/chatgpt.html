@@ -40,7 +40,7 @@
                         requestParameters.push(cleanedItem)
                     });
             })
-            // .then(() => drawParameters())
+            .then(() => drawParameters())
             .catch(error => alert(error))
     }
 
@@ -67,14 +67,14 @@
                 // reset for each radio button interaction
                 resetTunerRequestView()
                 await getRequestTunerFields(selectedRadioButton) //should await
-                await drawParameters();
+                // drawParameters();
                 break;
 
             case "ImageRequest":
                 // reset for each radio button interaction
                 resetTunerRequestView()
                 await getRequestTunerFields(selectedRadioButton) //should await
-                await drawParameters();
+                // drawParameters();
                 break;
         }
     }
