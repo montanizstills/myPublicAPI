@@ -6,10 +6,10 @@
     <button type=submit>Submit</button>
 
     <input type="radio" name="openaiRequestRadio" value="CompletionRequest"
-           onchange="displayOpenAIModelTuner()"> Completion Request
+           onchange="displayOpenAIModelTunerOnScreen()"> Completion Request
 
     <input type="radio" name="openaiRequestRadio" value="ImageRequest"
-           onchange="displayOpenAIModelTuner()"> Image Request
+           onchange="displayOpenAIModelTunerOnScreen()"> Image Request
 </form>
 <div id="tunerRequestData"></div>
 
@@ -44,7 +44,7 @@
         // let http = async () => await fetch("",{method:"GET"}) TODO - use this method instead. This returns a Promise.
         let requestFieldEndpoint = `http://localhost:8080/public-api-controller/request-fields/${requestType}`
         fetch(requestFieldEndpoint, {method: "GET"})
-            //finish Promise<Response>, i.e. wait for server response
+            // finish Promise<Response>, i.e. wait for server response
             .then(response => response.text())
             // clean each element of the 'string'/array from the server response
             .then(items => {
@@ -66,7 +66,7 @@
             .catch(error => alert(error))
     }
 
-    function displayOpenAIModelTuner() {
+    function displayOpenAIModelTunerOnScreen() {
 
         switch (getSelectedRadioButton()) {
             case "CompletionRequest":
