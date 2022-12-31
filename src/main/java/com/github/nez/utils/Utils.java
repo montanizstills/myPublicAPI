@@ -12,7 +12,7 @@ import java.nio.file.Paths;
 
 public class Utils {
     @SneakyThrows
-    public static ResponseEntity loadPage(String path) {
+    public static ResponseEntity <String>loadPage(String path) {
         // could literally be any class --
         // the classLoader.getResource will handle the rest, it'd be interesting to know how this works
         // Module.class.getClassLoader().getResource(""); -- need JDK9

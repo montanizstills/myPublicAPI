@@ -15,15 +15,15 @@ import java.util.List;
 public class myPublicAPIController {
 
     @GetMapping(path = "/say-hi")
-    public ResponseEntity sayHi() {
+    public ResponseEntity<String> sayHi() {
         String spokenMessage = "Hello!";
-        ResponseEntity responseEntity = new ResponseEntity<>(spokenMessage, HttpStatus.OK);
+        ResponseEntity<String> responseEntity = new ResponseEntity<>(spokenMessage, HttpStatus.OK);
         return responseEntity;
     }
 
     @SneakyThrows
     @GetMapping(path = "/chatgpt")
-    public ResponseEntity loadPage() {
+    public ResponseEntity<String> loadPage() {
         return Utils.loadPage("static/chatgpt.html");
     }
 
@@ -35,11 +35,11 @@ public class myPublicAPIController {
 
     @SneakyThrows
     @GetMapping(path = "request-fields/{requestType}")
-    public ResponseEntity getRequestFields(@PathVariable String requestType) {
+    public ResponseEntity<String> getRequestFields(@PathVariable String requestType) {
         // not a big fan of passing in the FQN, would much rather like to pass just {requestType}
         String classPackageName = "com.github.nez.models.requests";
         Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName + "." + requestType);
-        List fields = new ArrayList();
+        List<String> fields = new ArrayList<>();
         for (Field declaredField : clazz.getDeclaredFields()) {
             // fancy code to remove the synthetic fields from the `field` name
             String cleanedFieldName = declaredField.getName().substring(declaredField.getName().indexOf("this$") + 1);
