@@ -16,6 +16,21 @@
 <script>
     let requestParameters = []
 
+    function getAllRadioButtons() {
+        return document.getElementsByName("openaiRequestRadio")
+    }
+
+    function getSelectedRadioButton() {
+        let selectedRadioButton
+
+        for (const radio of getAllRadioButtons()) {
+            if (radio.checked) {
+                selectedRadioButton = radio.value
+            }
+        }
+        return selectedRadioButton
+    }
+
     function getTunerRequestDataElement() {
         return document.getElementById("tunerRequestData")
     }
@@ -29,47 +44,39 @@
         // let http = async () => await fetch("",{method:"GET"}) TODO - use this method instead. This returns a Promise.
         let requestFieldEndpoint = `http://localhost:8080/public-api-controller/request-fields/${requestType}`
         fetch(requestFieldEndpoint, {method: "GET"})
-            .then(response => response.text()) //finish Promise<Response>
+            //finish Promise<Response>, i.e. wait for server response
+            .then(response => response.text())
+            // clean each element of the 'string'/array from the server response
             .then(items => {
                 items
                     .split(',')
                     .map(item => {
-                        // clean each element of the 'string'/array
+                        //replace '[]' everywhere
                         let cleanedItem = item.trim().replace(/^\[|\]$/g, '')
-                        // push the item into the global list
                         requestParameters.push(cleanedItem)
                     })
             })
-            .then(() => drawParameters())
+            //draw to DOM
+            .then(() => {
+                requestParameters
+                    .forEach(item => {
+                        getTunerRequestDataElement().innerHTML += `<input id="${item}_input_field"> ${item} <br/>`
+                    })
+            })
             .catch(error => alert(error))
     }
 
-    function drawParameters() {
-        requestParameters
-            .forEach(item => {
-                getTunerRequestDataElement().innerHTML += `<input id="${item}_input_field"> ${item} <br/>`
-            })
-    }
-
     function displayOpenAIModelTuner() {
-        let radios = document.getElementsByName("openaiRequestRadio")
-        let selectedRadioButton
 
-        for (const radio of radios) {
-            if (radio.checked) {
-                selectedRadioButton = radio.value
-            }
-        }
-
-        switch (selectedRadioButton) {
+        switch (getSelectedRadioButton()) {
             case "CompletionRequest":
                 resetTunerRequestView()
-                getRequestTunerFields(selectedRadioButton)
+                getRequestTunerFields(getSelectedRadioButton())
                 break
 
             case "ImageRequest":
                 resetTunerRequestView()
-                getRequestTunerFields(selectedRadioButton)
+                getRequestTunerFields(getSelectedRadioButton())
                 break
         }
     }
