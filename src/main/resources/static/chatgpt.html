@@ -5,6 +5,7 @@
     <textarea id=text-input></textarea>
     <button type=submit>Submit</button>
 
+<!--    TODO - value="completion-request" will allow you to use Utils.toPascalCase() in controller-->
     <input type="radio" name="openaiRequestRadio" value="CompletionRequest"
            onchange="displayOpenAIModelTunerOnScreen()"> Completion Request
 
@@ -41,7 +42,8 @@
     }
 
     function getRequestTunerFields(requestType) {
-        // let http = async () => await fetch("",{method:"GET"}) TODO - use this method instead. This returns a Promise.
+        // let http = async (requestType) => await fetch("",{method:"GET"}).then().catch() //TODO - use this method instead. This returns a Promise.
+        // http.apply("CompletionRequest")
         let requestFieldEndpoint = `http://localhost:8080/public-api-controller/request-fields/${requestType}`
         fetch(requestFieldEndpoint, {method: "GET"})
             // finish Promise<Response>, i.e. wait for server response
