@@ -103,7 +103,7 @@ public class CompletionRequest implements IOpenAIRequest {
     /**
      * The type of request -- used to identify self
      * */
-    private String requestType;
+    private final String requestType = "CompletionRequest";
 
     private final OpenAIClient openAIClient;
 

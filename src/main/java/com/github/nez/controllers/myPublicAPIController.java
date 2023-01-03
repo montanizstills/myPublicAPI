@@ -34,19 +34,14 @@ public class myPublicAPIController {
     public void postToModel(@RequestBody final String params) {
 
         //extract request type name from params.
-        Map<String,String> json = new Gson().fromJson(params, Map.class);
-        String className = json.get("requestType_input_field");
+        Map<String, String> json = new Gson().fromJson(params, Map.class);
+        String className = json.get("requestType_input_field"); // TODO - investigate why this call returns null, does the client pass correctly?
+
         System.out.println(className);
 //        String classPackageName = "com.github.nez.models.requests";
 //        Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName + "." + className);
-//
-//        myPublicAPIService = new MyPublicAPIService(new OpenAIClient(params.get("api_key"), params.get("model_input_field")));
-//
-//        // turn params into map
-//        Map javaMap = new Gson().fromJson(params, Map.class);
 //        Method method = clazz.getMethod("createRequest", Map.class);
 //        Object myObjectType = method.invoke(null,javaMap);
-//
 //        myPublicAPIService.getOpenAIClient().makeRequest(myObjectType, javaMap);
     }
 

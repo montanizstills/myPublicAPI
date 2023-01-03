@@ -82,6 +82,27 @@
         }
     }
 
+    function addRequestInputFieldsToMap(jsonMap) {
+        let mapString = Array
+            // get all input Elements with id that end with '_input_field'
+            .from(document.querySelectorAll("input[id$='_input_field']"))
+            // create a (key,value) pair of each Element's id and value and add to accumulator
+            .reduce((accumulator, field) => {
+                accumulator += `"${field.id.toString()}":${field.value.toString()}`
+                accumulator += ","
+                return accumulator
+            }, "")
+        // remove trailing comma from string
+        mapString = mapString.toString().replace(/,$/g)
+        // split map on comma to isolate  "someKey":"someVal", "someKey2":"someVal2",...etc
+        let keyValuePairs = mapString.split(",")
+        // for each item split `key` from `value` and add to dict
+        keyValuePairs.forEach(pair => {
+            const [key, value] = pair.split(":")
+            jsonMap[key] = value
+        })
+    }
+
     function postMessage(text) {
         let currentURL = window.location.href
         fetch(currentURL, {
@@ -96,33 +117,23 @@
     form.addEventListener('submit', handleSubmit)
 
     function handleSubmit(event) {
-        event.preventDefault()
-        let apiKey = document.querySelector('#api-key').value
+        event.preventDefault() // self-explanatory
+        event.stopPropagation() // stop event bubbling -- other parent element events will not trigger
+        event.stopImmediatePropagation() // stop other event listeners on the same element from being triggered.
+
+        // map to send to server
         const jsonMap = {}
 
-        let map = Array
-            // get all input Elements with id that end with '_input_field'
-            .from(document.querySelectorAll("input[id$='_input_field']"))
-            // create a (key,value) pair of each Element's id and value and add to accumulator
-            .reduce((accumulator, field) => {
-                accumulator += `"${field.id.toString()}":${field.value.toString()}`
-                accumulator += ","
-                return accumulator
-            }, "")
+        // add api key to map
+        let apiKey = document.querySelector('#api-key').value
+        jsonMap["\"apiKey\""] = apiKey
 
-        // remove trailing comma from string
-        map = map.toString().replace(/,$/g)
-        // split map on comma to isolate  "someKey":"someVal", "someKey2":"someVal2",...etc
-        keyValuePairs = map.split(",")
-        // for each item split `key` from `value` and add to dict
-        keyValuePairs.forEach(pair => {
-            const [key, value] = pair.split(":")
-            jsonMap[key] = value
-        })
+        // add each input field to map
+        addRequestInputFieldsToMap(jsonMap);
 
-        console.log("My map: ",jsonMap)
-
+        // send map to sever
         postMessage(jsonMap)
     }
+
 
 </script>
