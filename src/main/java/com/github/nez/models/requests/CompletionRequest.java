@@ -100,6 +100,11 @@ public class CompletionRequest implements IOpenAIRequest {
      */
     private String user;
 
+    /**
+     * The type of request -- used to identify self
+     * */
+    private String requestType;
+
     private final OpenAIClient openAIClient;
 
     @Override

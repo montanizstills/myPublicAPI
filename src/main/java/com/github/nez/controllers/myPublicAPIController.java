@@ -1,6 +1,7 @@
 package com.github.nez.controllers;
 
 import com.github.nez.utils.Utils;
+import com.google.gson.Gson;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @RestController()
 @RequestMapping(value = "/public-api-controller")
@@ -27,10 +29,25 @@ public class myPublicAPIController {
         return Utils.loadPage("static/chatgpt.html");
     }
 
+    @SneakyThrows
     @PostMapping(path = "/chatgpt")
-    public void postToModel(@RequestBody String params) {
-//        new OpenAIClient("","").makeRequest(CompletionRequest.builder().build(), params);
-        System.out.println(params.toString());
+    public void postToModel(@RequestBody final String params) {
+
+        //extract request type name from params.
+        Map<String,String> json = new Gson().fromJson(params, Map.class);
+        String className = json.get("requestType_input_field");
+        System.out.println(className);
+//        String classPackageName = "com.github.nez.models.requests";
+//        Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName + "." + className);
+//
+//        myPublicAPIService = new MyPublicAPIService(new OpenAIClient(params.get("api_key"), params.get("model_input_field")));
+//
+//        // turn params into map
+//        Map javaMap = new Gson().fromJson(params, Map.class);
+//        Method method = clazz.getMethod("createRequest", Map.class);
+//        Object myObjectType = method.invoke(null,javaMap);
+//
+//        myPublicAPIService.getOpenAIClient().makeRequest(myObjectType, javaMap);
     }
 
     @SneakyThrows

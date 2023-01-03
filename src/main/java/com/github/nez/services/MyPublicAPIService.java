@@ -1,4 +1,4 @@
 package com.github.nez.services;
 
-public class myPublicAPIService {
+public class MyPublicAPIService {
 }
