@@ -9,11 +9,11 @@ import java.util.Map;
 
 @Builder(setterPrefix = "set")
 @Getter
-public class ModerationRequest implements IOpenAIRequest {
+public class ModerationRequest implements IOpenAIRequest<ModerationRequest> {
     private final OpenAIClient openAIClient;
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public ModerationRequest createRequest(Map<String, Object> parameters) {
         return null;
     }
 }

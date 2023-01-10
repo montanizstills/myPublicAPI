@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Builder(setterPrefix = "set")
-public class ImageRequest implements IOpenAIRequest {
+public class ImageRequest implements IOpenAIRequest<ImageRequest> {
     private final OpenAIClient openAIClient;
     /**
      * @param n               The number of images to generate.
@@ -34,7 +34,7 @@ public class ImageRequest implements IOpenAIRequest {
 
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public ImageRequest createRequest(Map<String, Object> parameters) {
         return ImageRequest.builder()
                 .setN(Integer.valueOf(String.valueOf(parameters.get("n"))))
                 .setOpenAIClient((OpenAIClient) parameters.get("openAIClient"))

@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 @Builder(setterPrefix = "set")
-public class CompletionRequest implements IOpenAIRequest {
+public class CompletionRequest implements IOpenAIRequest<CompletionRequest> {
 
     /**
      * @param echo             Echo back the prompt in addition to the completion
@@ -108,7 +108,7 @@ public class CompletionRequest implements IOpenAIRequest {
     private final OpenAIClient openAIClient;
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public CompletionRequest createRequest(Map<String, Object> parameters) {
         return CompletionRequest.builder()
                 .setN(Integer.valueOf(String.valueOf(parameters.get("n"))))
                 .setOpenAIClient((OpenAIClient) parameters.get("openAIClient"))

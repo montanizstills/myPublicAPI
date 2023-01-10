@@ -9,11 +9,11 @@ import java.util.Map;
 
 @Builder(setterPrefix = "set")
 @Getter
-public class EmbeddingsRequest implements IOpenAIRequest {
+public class EmbeddingsRequest implements IOpenAIRequest<EmbeddingsRequest> {
     private final OpenAIClient openAIClient;
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public EmbeddingsRequest createRequest(Map<String, Object> parameters) {
         return null;
     }
 }

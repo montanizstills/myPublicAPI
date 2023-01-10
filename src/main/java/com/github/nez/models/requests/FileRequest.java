@@ -9,11 +9,11 @@ import java.util.Map;
 
 @Builder(setterPrefix = "set")
 @Getter
-public class FileRequest implements IOpenAIRequest {
+public class FileRequest implements IOpenAIRequest<FileRequest> {
     private final OpenAIClient openAIClient;
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public FileRequest createRequest(Map<String, Object> parameters) {
         return null;
     }
 }

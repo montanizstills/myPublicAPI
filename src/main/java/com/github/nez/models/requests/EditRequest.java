@@ -9,12 +9,12 @@ import java.util.Map;
 
 @Builder(setterPrefix = "set")
 @Getter
-public class EditRequest implements IOpenAIRequest {
+public class EditRequest implements IOpenAIRequest<EditRequest> {
     private final OpenAIClient openAIClient;
 
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public EditRequest createRequest(Map<String, Object> parameters) {
         return null;
     }
 }

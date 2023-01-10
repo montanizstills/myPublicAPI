@@ -7,10 +7,10 @@ import java.util.Map;
 /**
  * A generic request object for OpenAI API interaction.
  **/
-public interface IOpenAIRequest {
+public interface IOpenAIRequest<IOpenAIRequestType extends IOpenAIRequest> {
 
     OpenAIClient getOpenAIClient();
 
-    IOpenAIRequest createRequest(Map<String,Object> parameters);
+    IOpenAIRequestType createRequest(Map<String,Object> parameters);
 
 }

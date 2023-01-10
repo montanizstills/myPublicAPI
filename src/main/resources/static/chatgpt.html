@@ -88,7 +88,7 @@
             .from(document.querySelectorAll("input[id$='_input_field']"))
             // create a (key,value) pair of each Element's id and value and add to accumulator
             .reduce((accumulator, field) => {
-                accumulator += `"${field.id.toString()}":${field.value.toString()}`
+                accumulator += `${field.id.toString()}:${field.value.toString()}`
                 accumulator += ","
                 return accumulator
             }, "")
@@ -126,10 +126,11 @@
 
         // add api key to map
         let apiKey = document.querySelector('#api-key').value
-        jsonMap["\"apiKey\""] = apiKey
+        jsonMap["apiKey"] = apiKey
 
         // add each input field to map
         addRequestInputFieldsToMap(jsonMap);
+        console.log(jsonMap)
 
         // send map to sever
         postMessage(jsonMap)

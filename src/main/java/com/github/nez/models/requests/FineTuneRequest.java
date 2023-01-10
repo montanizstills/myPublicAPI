@@ -11,11 +11,11 @@ import java.util.Map;
 
 @Builder(setterPrefix = "set")
 @Getter
-public class FineTuneRequest implements IOpenAIRequest {
+public class FineTuneRequest implements IOpenAIRequest<FineTuneRequest>{
     private final OpenAIClient openAIClient;
 
     @Override
-    public IOpenAIRequest createRequest(Map<String, Object> parameters) {
+    public FineTuneRequest createRequest(Map<String, Object> parameters) {
         return null;
     }
 }
