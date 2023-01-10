@@ -1,8 +1,5 @@
 package com.github.nez.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.nez.models.interfaces.IOpenAIRequest;
 import com.github.nez.utils.Utils;
 import com.google.gson.Gson;
 import lombok.SneakyThrows;
@@ -15,8 +12,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController()
 @RequestMapping(value = "/public-api-controller")
@@ -45,24 +40,36 @@ public class myPublicAPIController {
         // null check
         if ("".equalsIgnoreCase(className) || className == null) {
             throw new Error("OpenAI request type must not be null!");
+            // send request for information to FrontEnd?
         }
-
-        // get list of classes of IOpenAIRequest type
-//        List<Class<?>> classTypeList = Stream.of(Package.getPackages())
-//                .flatMap(pkg -> Stream.of(pkg.getName())) // convert package into string representation of its name
-//                .filter(pkgName -> pkgName.equals("com.github.nez"))
-//                .flatMap(pkgName -> Utils.getAllClassesFromPackage(pkgName).stream())
-//                .filter(IOpenAIRequest.class::isAssignableFrom) // filter
-//                .collect(Collectors.toList());
-//
 
         // create object of type
         String classPackageName = "com.github.nez.models.requests";
-        Class<?> clazz = ClassLoader.getSystemClassLoader().loadClass(classPackageName + "." + className);
-        Method method = clazz.getMethod("createRequest", Map.class);
-        Object myObjectType = method.invoke(null, json);
+        Class<?> cls = Utils.loadClass(classPackageName +"."+ className);
 
+        // get builder method of class and create builder
+        Method builderMethod = cls.getDeclaredMethod("builder");
+        Object builder = builderMethod.invoke(null);
+
+        // assign values to fields for field of class
+        for (Map.Entry<String,String> entry: json.entrySet()){
+
+            String fieldName = entry.getKey();
+            String fieldValue = entry.getValue();
+            Field field = builder.getClass().getDeclaredField(fieldName);
+            field.set(builder,fieldValue);
+        }
+
+        // build object
+        builderMethod = builder.getClass().getDeclaredMethod("build");
+        Object requestObjectOfType = builderMethod.invoke(builder);
+
+        System.out.println(requestObjectOfType);
 //         myPublicAPIService.getOpenAIClient().makeRequest(myObjectType, javaMap);
+
+    }
+
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException {
 
     }
 

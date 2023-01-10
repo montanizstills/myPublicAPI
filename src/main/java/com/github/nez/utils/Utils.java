@@ -1,5 +1,6 @@
 package com.github.nez.utils;
 
+import com.github.nez.models.interfaces.IOpenAIRequest;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,19 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
+
+    public List<Class<?>> getListOfClassesOfPackage(String packageName){
+        return Stream.of(Package.getPackages())
+                .flatMap(pkg -> Stream.of(pkg.getName())) // convert package into string representation of its name
+                .filter(pkgName -> pkgName.equals(packageName))
+                .flatMap(pkgName -> Utils.getAllClassesFromPackage(pkgName).stream())
+                .filter(IOpenAIRequest.class::isAssignableFrom) // filter
+                .collect(Collectors.toList());
+    }
 
     @SneakyThrows
     public static Class<?> loadClass(String className) {
